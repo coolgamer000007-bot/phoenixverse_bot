@@ -2,7 +2,7 @@ import os
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 
-BOT_TOKEN = os.environ.get("8482871094:AAHx8sR3QW5YE6VsxgqH1dg7cDOTD1Vb4og")
+BOT_TOKEN = "8482871094:AAHx8sR3QW5YE6VsxgqH1dg7cDOTD1Vb4og"
 CHANNEL_USERNAME = "@phoenixverse_07"
 
 APPS = {
@@ -72,4 +72,5 @@ app.run_webhook(
     listen="0.0.0.0",
     port=PORT,
     webhook_url=os.environ.get("RENDER_EXTERNAL_URL")
+
 )

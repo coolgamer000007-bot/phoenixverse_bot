@@ -2,9 +2,11 @@ import os
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 
+# ===== BOT CONFIG =====
 BOT_TOKEN = "8482871094:AAHx8sR3QW5YE6VsxgqH1dg7cDOTD1Vb4og"
 CHANNEL_USERNAME = "@phoenixverse_07"
 
+# ===== APP DATABASE =====
 APPS = {
     "blurr": {
         "file_id": "BQACAgUAAxkBAAIBB2me8LGx_9e2yAFgp6Pd8vFIF1UjAAIVIQACx0b5VDFnVS4nU3yvOgQ",
@@ -28,6 +30,7 @@ APPS = {
     }
 }
 
+# ===== CHECK CHANNEL JOIN =====
 async def is_joined(user_id, context):
     try:
         member = await context.bot.get_chat_member(CHANNEL_USERNAME, user_id)
@@ -35,6 +38,7 @@ async def is_joined(user_id, context):
     except:
         return False
 
+# ===== START COMMAND =====
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = update.effective_user
     args = context.args
@@ -63,14 +67,19 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         caption=app_data["caption"]
     )
 
+# ===== MAIN APP =====
 app = ApplicationBuilder().token(BOT_TOKEN).build()
 app.add_handler(CommandHandler("start", start))
 
-PORT = int(os.environ.get("PORT", 10000))
+# ===== RAILWAY WEBHOOK =====
+PORT = int(os.environ.get("PORT", 8000))
+WEBHOOK_URL = os.environ.get("RAILWAY_STATIC_URL")
 
-app.run_webhook(
-    listen="0.0.0.0",
-    port=PORT,
-    webhook_url=os.environ.get("RENDER_EXTERNAL_URL")
-
-)
+if WEBHOOK_URL:
+    app.run_webhook(
+        listen="0.0.0.0",
+        port=PORT,
+        webhook_url=f"https://{WEBHOOK_URL}"
+    )
+else:
+    app.run_polling()
